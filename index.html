@@ -1,0 +1,487 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Everyday Movement â Reader's Dashboard</title><meta name="description" content="An interactive reader's dashboard for Everyday Movement by Gigi L. Leung â essential context, a Hong Kong playlist, and book club questions."><style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+:root {
+--ink: #1a1a2e;
+--cream: #faf8f5;
+--gold: #c9a84c;
+--red: #c0392b;
+--teal: #2c7873;
+--muted: #6b7280;
+--light-border: #e5e1dc;
+--card-bg: #ffffff;
+--shadow: 0 4px 24px rgba(0,0,0,0.05);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+font-family: 'Inter', sans-serif;
+background: var(--cream);
+color: var(--ink);
+line-height: 1.85;
+font-weight: 400;
+font-size: 16px;
+-webkit-font-smoothing: antialiased;
+}
+/* HERO */
+.hero {
+background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+color: #fff;
+padding: 90px 28px 70px;
+text-align: center;
+position: relative;
+overflow: hidden;
+}
+.hero::before {
+content: '';
+position: absolute;
+top: -50%; left: -50%;
+width: 200%; height: 200%;
+background: radial-gradient(circle at 30% 70%, rgba(201,168,76,0.08) 0%, transparent 50%),
+radial-gradient(circle at 70% 30%, rgba(192,57,43,0.06) 0%, transparent 50%);
+animation: drift 20s ease-in-out infinite alternate;
+}
+@keyframes drift {
+0% { transform: translate(0,0) rotate(0deg); }
+100% { transform: translate(-3%,2%) rotate(2deg); }
+}
+.hero-content { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+.hero-label {
+font-size: 11px;
+letter-spacing: 5px;
+text-transform: uppercase;
+color: var(--gold);
+margin-bottom: 24px;
+font-weight: 600;
+}
+.hero h1 {
+font-family: 'Playfair Display', serif;
+font-size: clamp(2.6rem, 5.5vw, 3.8rem);
+font-weight: 700;
+margin-bottom: 14px;
+line-height: 1.15;
+}
+.hero h1 em { font-style: italic; color: var(--gold); }
+.hero .author {
+font-size: 1.1rem;
+color: rgba(255,255,255,0.75);
+margin-bottom: 8px;
+}
+.hero .translator {
+font-size: 0.88rem;
+color: rgba(255,255,255,0.45);
+margin-bottom: 32px;
+}
+.hero .tagline {
+font-family: 'Playfair Display', serif;
+font-style: italic;
+font-size: 1.15rem;
+color: rgba(255,255,255,0.6);
+max-width: 560px;
+margin: 0 auto;
+line-height: 1.7;
+}
+.pub-badges {
+display: flex;
+justify-content: center;
+gap: 14px;
+margin-top: 32px;
+flex-wrap: wrap;
+}
+.pub-badge {
+font-size: 0.7rem;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+padding: 7px 18px;
+border: 1px solid rgba(255,255,255,0.2);
+border-radius: 20px;
+color: rgba(255,255,255,0.6);
+}
+/* NAV */
+.nav {
+position: sticky;
+top: 0;
+z-index: 100;
+background: rgba(250,248,245,0.95);
+backdrop-filter: blur(14px);
+border-bottom: 1px solid var(--light-border);
+display: flex;
+justify-content: center;
+gap: 6px;
+padding: 12px 16px;
+flex-wrap: wrap;
+}
+.nav button {
+font-family: 'Inter', sans-serif;
+font-size: 0.82rem;
+font-weight: 500;
+padding: 9px 20px;
+border: none;
+background: transparent;
+color: var(--muted);
+border-radius: 22px;
+cursor: pointer;
+transition: all 0.25s;
+letter-spacing: 0.2px;
+}
+.nav button:hover { color: var(--ink); background: rgba(0,0,0,0.04); }
+.nav button.active { color: #fff; background: var(--ink); }
+/* SECTIONS */
+.section { display: none; padding: 56px 28px 72px; max-width: 860px; margin: 0 auto; }
+.section.active { display: block; }
+.section-title {
+font-family: 'Playfair Display', serif;
+font-size: 2rem;
+margin-bottom: 10px;
+}
+.section-subtitle {
+color: var(--muted);
+font-size: 0.95rem;
+margin-bottom: 40px;
+line-height: 1.6;
+}
+/* CARDS */
+.card {
+background: var(--card-bg);
+border-radius: 14px;
+padding: 32px;
+margin-bottom: 24px;
+box-shadow: var(--shadow);
+border: 1px solid var(--light-border);
+}
+.card h3 {
+font-family: 'Playfair Display', serif;
+font-size: 1.25rem;
+margin-bottom: 14px;
+display: flex;
+align-items: center;
+gap: 12px;
+}
+.card p {
+color: #3d3d3d;
+font-size: 0.95rem;
+line-height: 1.85;
+}
+.card p + p { margin-top: 12px; }
+.icon-circle {
+width: 38px; height: 38px;
+border-radius: 50%;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+font-size: 1rem;
+flex-shrink: 0;
+}
+.ic-red { background: rgba(192,57,43,0.1); }
+.ic-teal { background: rgba(44,120,115,0.1); }
+.ic-gold { background: rgba(201,168,76,0.15); }
+.ic-ink { background: rgba(26,26,46,0.08); }
+/* TIMELINE */
+.timeline { position: relative; padding-left: 32px; margin-bottom: 40px; }
+.timeline::before {
+content: '';
+position: absolute;
+left: 9px; top: 0; bottom: 0;
+width: 2px;
+background: linear-gradient(to bottom, var(--gold), var(--red));
+border-radius: 2px;
+}
+.timeline-item {
+position: relative;
+margin-bottom: 32px;
+padding-left: 22px;
+}
+.timeline-item::before {
+content: '';
+position: absolute;
+left: -27px; top: 7px;
+width: 14px; height: 14px;
+border-radius: 50%;
+background: var(--gold);
+border: 3px solid var(--cream);
+}
+.timeline-item .date {
+font-size: 0.75rem;
+font-weight: 600;
+color: var(--red);
+letter-spacing: 1.2px;
+text-transform: uppercase;
+margin-bottom: 5px;
+}
+.timeline-item h4 {
+font-family: 'Playfair Display', serif;
+font-size: 1.1rem;
+margin-bottom: 6px;
+}
+.timeline-item p { font-size: 0.92rem; color: #4a4a4a; line-height: 1.75; }
+/* CHARACTER CARDS */
+.char-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
+.char-card {
+background: var(--card-bg);
+border-radius: 14px;
+padding: 28px;
+box-shadow: var(--shadow);
+border: 1px solid var(--light-border);
+border-top: 3px solid var(--gold);
+}
+.char-card h4 {
+font-family: 'Playfair Display', serif;
+font-size: 1.2rem;
+margin-bottom: 5px;
+}
+.char-card .role {
+font-size: 0.76rem;
+color: var(--teal);
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 1.2px;
+margin-bottom: 12px;
+}
+.char-card p { font-size: 0.92rem; color: #4a4a4a; line-height: 1.8; }
+/* PLAYLIST */
+.playlist-intro { margin-bottom: 32px; }
+.playlist-intro p { color: #4a4a4a; font-size: 0.95rem; }
+.track {
+display: flex;
+align-items: center;
+gap: 16px;
+padding: 18px 22px;
+background: var(--card-bg);
+border-radius: 12px;
+margin-bottom: 12px;
+box-shadow: var(--shadow);
+border: 1px solid var(--light-border);
+transition: transform 0.2s, box-shadow 0.2s;
+text-decoration: none;
+color: inherit;
+}
+.track:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(0,0,0,0.1); }
+.track-num {
+font-size: 0.85rem;
+font-weight: 600;
+color: var(--muted);
+min-width: 26px;
+text-align: center;
+}
+.track-info { flex: 1; }
+.track-info .song {
+font-weight: 600;
+font-size: 0.98rem;
+color: var(--ink);
+}
+.track-info .song-zh {
+font-size: 0.88rem;
+color: var(--muted);
+margin-top: 1px;
+}
+.track-info .artist {
+font-size: 0.84rem;
+color: var(--muted);
+margin-top: 2px;
+}
+.track-why {
+font-size: 0.82rem;
+color: #666;
+font-style: italic;
+max-width: 220px;
+text-align: right;
+line-height: 1.4;
+display: none;
+}
+.yt-icon {
+width: 36px; height: 36px;
+border-radius: 50%;
+background: #FF0000;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+transition: transform 0.2s;
+}
+.track:hover .yt-icon { transform: scale(1.1); }
+.yt-icon svg { width: 16px; height: 16px; fill: #fff; }
+.track-tag {
+font-size: 0.68rem;
+letter-spacing: 1px;
+text-transform: uppercase;
+padding: 4px 11px;
+border-radius: 12px;
+font-weight: 600;
+white-space: nowrap;
+}
+.tag-protest { background: rgba(192,57,43,0.1); color: var(--red); }
+.tag-nostalgia { background: rgba(201,168,76,0.15); color: #8a6d1b; }
+.tag-loss { background: rgba(26,26,46,0.08); color: var(--ink); }
+.tag-identity { background: rgba(44,120,115,0.1); color: var(--teal); }
+.tag-resilience { background: rgba(107,114,128,0.1); color: var(--muted); }
+@media (min-width: 680px) {
+.track-why { display: block; }
+}
+/* QUESTIONS */
+.question-card {
+background: var(--card-bg);
+border-radius: 14px;
+padding: 28px 32px;
+margin-bottom: 18px;
+box-shadow: var(--shadow);
+border: 1px solid var(--light-border);
+cursor: pointer;
+transition: all 0.3s;
+position: relative;
+overflow: hidden;
+}
+.question-card::before {
+content: '';
+position: absolute;
+left: 0; top: 0; bottom: 0;
+width: 4px;
+background: var(--gold);
+border-radius: 4px 0 0 4px;
+opacity: 0;
+transition: opacity 0.3s;
+}
+.question-card:hover::before { opacity: 1; }
+.question-card:hover { transform: translateX(4px); }
+.q-header { display: flex; align-items: flex-start; gap: 16px; }
+.q-number {
+font-family: 'Playfair Display', serif;
+font-size: 1.5rem;
+font-weight: 700;
+color: var(--gold);
+line-height: 1;
+min-width: 32px;
+}
+.q-text {
+font-size: 1.02rem;
+font-weight: 500;
+color: var(--ink);
+line-height: 1.6;
+}
+.q-subtext {
+font-size: 0.9rem;
+color: #555;
+margin-top: 14px;
+padding-left: 48px;
+display: none;
+line-height: 1.8;
+}
+.question-card.open .q-subtext { display: block; }
+.q-toggle {
+font-size: 0.72rem;
+color: var(--teal);
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 1.2px;
+margin-top: 12px;
+padding-left: 48px;
+}
+.question-card.open .q-toggle::after { content: ' (tap to close)'; }
+/* AUTHOR */
+.author-bio { display: grid; grid-template-columns: 1fr; gap: 24px; }
+.award-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.award {
+font-size: 0.8rem;
+padding: 7px 16px;
+background: rgba(201,168,76,0.12);
+color: #8a6d1b;
+border-radius: 18px;
+font-weight: 500;
+}
+/* LINKS */
+.links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-top: 24px; }
+.link-card {
+display: block;
+background: var(--card-bg);
+border-radius: 12px;
+padding: 22px;
+box-shadow: var(--shadow);
+border: 1px solid var(--light-border);
+text-decoration: none;
+color: var(--ink);
+transition: transform 0.2s, box-shadow 0.2s;
+}
+.link-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+.link-card .lc-source {
+font-size: 0.72rem;
+text-transform: uppercase;
+letter-spacing: 1.8px;
+color: var(--muted);
+margin-bottom: 8px;
+font-weight: 600;
+}
+.link-card .lc-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 6px; }
+.link-card .lc-desc { font-size: 0.84rem; color: #666; line-height: 1.5; }
+/* CW NOTE */
+.cw-box {
+background: rgba(192,57,43,0.05);
+border: 1px solid rgba(192,57,43,0.12);
+border-radius: 12px;
+padding: 22px 28px;
+margin-bottom: 28px;
+}
+.cw-box h4 { color: var(--red); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1.8px; margin-bottom: 10px; font-weight: 600; }
+.cw-box p { font-size: 0.92rem; color: #555; line-height: 1.75; }
+/* VOCAB */
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 24px; }
+.vocab-item {
+background: var(--card-bg);
+border-radius: 12px;
+padding: 20px 22px;
+border: 1px solid var(--light-border);
+box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+}
+.vocab-item .term { font-weight: 600; font-size: 0.98rem; margin-bottom: 6px; color: var(--ink); }
+.vocab-item .def { font-size: 0.88rem; color: #555; line-height: 1.7; }
+/* FOOTER */
+footer {
+text-align: center;
+padding: 48px 28px;
+font-size: 0.82rem;
+color: var(--muted);
+border-top: 1px solid var(--light-border);
+max-width: 860px;
+margin: 0 auto;
+line-height: 1.7;
+}
+footer a { color: var(--teal); text-decoration: none; }
+/* SHARE BAR */
+.share-bar {
+display: flex;
+justify-content: center;
+gap: 12px;
+margin-top: 20px;
+flex-wrap: wrap;
+}
+.share-btn {
+font-family: 'Inter', sans-serif;
+font-size: 0.78rem;
+font-weight: 500;
+padding: 8px 18px;
+border: 1px solid var(--light-border);
+border-radius: 20px;
+background: var(--card-bg);
+color: var(--ink);
+cursor: pointer;
+transition: all 0.2s;
+text-decoration: none;
+display: inline-flex;
+align-items: center;
+gap: 6px;
+}
+.share-btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+@media (max-width: 600px) {
+.hero { padding: 60px 20px 48px; }
+.section { padding: 36px 18px 48px; }
+.card { padding: 24px; }
+.nav { gap: 3px; }
+.nav button { font-size: 0.74rem; padding: 8px 14px; }
+.track { padding: 14px 16px; gap: 12px; }
+.question-card { padding: 22px 20px; }
+}
+</style></head><body><!-- HERO --><div class="hero"><div class="hero-content"><div class="hero-label">Reader's Dashboard</div><h1><em>Everyday Movement</em></h1><div class="author">by Gigi L. Leung &middot; translated by Jennifer Feeley</div><div class="translator">Riverhead Books &middot; February 2026 &middot; 288 pages</div><div class="tagline">"A cinematic, sympathetic view of the personal costs of political conflict, many of which will be frighteningly familiar."</div><div class="pub-badges"><span class="pub-badge">Golden Tripod Award Winner</span><span class="pub-badge">Asia Society Book Club Pick</span><span class="pub-badge">Banned at HK Book Fair 2024</span></div></div></div><!-- NAV --><div class="nav"><button class="active" onclick="show('context')">Before You Read</button><button onclick="show('characters')">Characters</button><button onclick="show('author')">The Author</button><button onclick="show('playlist')">HK Playlist</button><button onclick="show('questions')">Book Club</button><button onclick="show('links')">Go Deeper</button></div><!-- BEFORE YOU READ --><div class="section active" id="context"><div class="section-title">Before You Read</div><div class="section-subtitle">Essential context to get the most from this novel</div><div class="card"><h3><span class="icon-circle ic-ink">&#9733;</span> What This Book Is</h3><p><strong>Everyday Movement</strong> is an award-winning novel set during the 2019 Hong Kong anti-extradition protests. It follows two college roommates&mdash;the quiet, anxious <strong>Ah Lei</strong> and the brash, self-assured <strong>Panda</strong>&mdash;as their friendship, families, and daily lives are reshaped by the political upheaval around them.</p><p>The novel interweaves scenes of normalcy (meals, shopping, movies) with episodes of tear gas, violence, and moral reckoning. Originally published in Chinese, it won Taiwan's <strong>Golden Tripod Award</strong>&mdash;the country's highest literary honor&mdash;and was notably <strong>removed from the Hong Kong Book Fair in 2024</strong> after political complaints.</p></div><div class="cw-box"><h4>Content Heads-Up</h4><p>This novel includes depictions of protest violence, tear gas exposure, police confrontation, political tension within families, and emotional distress. Leung portrays these events with realism and visceral sensory detail.</p></div><div class="card"><h3><span class="icon-circle ic-red">&#9632;</span> The Historical Moment</h3><p>The entire novel unfolds during the summer and fall of 2019, when Hong Kong experienced the largest protests in its history. Here's the timeline you need:</p></div><div class="timeline"><div class="timeline-item"><div class="date">February 2019</div><h4>The Extradition Bill is proposed</h4><p>Hong Kong's government introduces a bill allowing extradition of suspects to mainland China. Critics fear it would expose Hong Kongers to China's opaque legal system and erode the "one country, two systems" framework.</p></div><div class="timeline-item"><div class="date">June 9, 2019</div><h4>One million march</h4><p>An estimated one million people take to the streets peacefully. The government does not withdraw the bill.</p></div><div class="timeline-item"><div class="date">June 12, 2019</div><h4>First major clashes</h4><p>Police fire tear gas and rubber bullets at protesters surrounding the Legislative Council. This is the first major escalation&mdash;the moment the "everyday" becomes the "movement."</p></div><div class="timeline-item"><div class="date">June 15, 2019</div><h4>Bill suspended, but too late</h4><p>The government suspends (but doesn't withdraw) the bill. Protesters expand their demands to five, including an independent investigation into police conduct and universal suffrage.</p></div><div class="timeline-item"><div class="date">July &ndash; November 2019</div><h4>Escalation &amp; the "be water" strategy</h4><p>Protests become decentralized. Tear gas becomes routine. Shopping malls become protest sites. This is the world of the novel&mdash;where daily life and political crisis blur completely.</p></div><div class="timeline-item"><div class="date">June 2020 (after the novel)</div><h4>National Security Law imposed</h4><p>Beijing imposes a sweeping security law criminalizing dissent. Many activists are arrested, organizations dissolve, and a wave of emigration begins. This is the shadow that hangs over the English translation.</p></div></div><div class="card"><h3><span class="icon-circle ic-teal">&#9830;</span> Key Concepts to Know</h3><p>Leung doesn't over-explain Hong Kong for outsiders. These terms and ideas will enrich your reading:</p></div><div class="vocab-grid"><div class="vocab-item"><div class="term">"One Country, Two Systems"</div><div class="def">The framework promised when Britain returned Hong Kong to China in 1997&mdash;guaranteeing freedoms of press, speech, and assembly until 2047.</div></div><div class="vocab-item"><div class="term">"Be Water"</div><div class="def">Borrowed from Bruce Lee, this became the protest motto: stay fluid, avoid direct confrontation, disperse and regroup. No single leader, no fixed location.</div></div><div class="vocab-item"><div class="term">Lennon Walls</div><div class="def">Public walls covered with sticky notes carrying messages of solidarity. Named after the original in Prague, they appeared across Hong Kong neighborhoods.</div></div><div class="vocab-item"><div class="term">Yellow vs. Blue Economy</div><div class="def">Businesses color-coded by political allegiance. "Yellow" shops supported protesters; "blue" shops were pro-government. Where you ate lunch became a political act.</div></div><div class="vocab-item"><div class="term">New Town Plaza</div><div class="def">The shopping mall in Sha Tin where the novel opens. In real life, it was a major protest flashpoint&mdash;a symbol of how consumerism and resistance occupied the same space.</div></div><div class="vocab-item"><div class="term">"Five Demands, Not One Less"</div><div class="def">The protest slogan: withdraw the bill, retract the "riot" label, release arrested protesters, investigate police, and implement universal suffrage.</div></div></div><div class="card" style="margin-top: 28px;"><h3><span class="icon-circle ic-gold">&#9827;</span> How to Read This Novel</h3><p>This isn't a protest novel with heroes and villains. Leung uses a <strong>kaleidoscopic structure</strong>&mdash;shifting between characters, moments, and moods without guiding you toward a single conclusion.</p><p>Let the fragments accumulate. The power is in the juxtaposition: a mother washing her daughter's tear-gas-stained clothes, then going to buy groceries. A couple arguing about whether to attend a march, then watching a movie. The "everyday" IS the movement. That's the entire point of the title.</p></div></div><!-- CHARACTERS --><div class="section" id="characters"><div class="section-title">The Characters</div><div class="section-subtitle">The interconnected lives at the center of this story</div><div class="char-grid"><div class="char-card"><h4>Ah Lei</h4><div class="role">College student &middot; Protagonist</div><p>Meek, anxious, deeply affected by the political turmoil. She feels the weight of what's happening and can't look away. Her uncertainty mirrors the broader paralysis many Hong Kongers experienced: wanting to act but unsure how, or at what cost.</p></div><div class="char-card"><h4>Panda</h4><div class="role">Ah Lei's roommate &middot; Protagonist</div><p>Brash, self-assured, and determined to maintain her daily routine despite the chaos. Panda's insistence on normalcy&mdash;self-care, shopping, going out&mdash;is its own form of resistance, or perhaps denial. Leung lets you decide which.</p></div><div class="char-card"><h4>The Mothers</h4><div class="role">Family &middot; Supporting</div><p>The mother-daughter relationships are central. These women hold families together while the city fractures, navigating the gap between wanting to protect their children and understanding why they march.</p></div><div class="char-card"><h4>The Broader Cast</h4><div class="role">Interconnected lives</div><p>Romantic partners, classmates, shopkeepers, strangers on the MTR. Leung traces how the movement touches everyone differently&mdash;financial stress, ethical dilemmas, fractured friendships, quiet acts of courage.</p></div></div></div><!-- AUTHOR --><div class="section" id="author"><div class="section-title">About the Author</div><div class="section-subtitle">Gigi L. Leung (Leung Lee Chi / &#26753;&#33673;&#23039;)</div><div class="author-bio"><div class="card"><h3><span class="icon-circle ic-gold">&#9998;</span> Who She Is</h3><p>Gigi L. Leung grew up in Hong Kong, graduated from the Chinese University of Hong Kong, and now lives in Hualien, Taiwan. She began writing at fifteen about individuals and the times in which they live. She is among the youngest award-winning authors in Hong Kong's literary scene and writes both fiction and poetry.</p><div class="award-list"><span class="award">Golden Tripod Award 2024 (Taiwan)</span><span class="award">Young Artist Award 2020 (HK Arts Council)</span><span class="award">Taipei Literary Award Finalist</span></div></div><div class="card"><h3><span class="icon-circle ic-teal">&#9733;</span> Why This Book Matters</h3><p><strong>Everyday Movement</strong> was ordered removed from the Hong Kong Book Fair in 2024 after political complaints&mdash;an act that underscores its power and relevance. For English-language readers, this is one of the first major works of fiction about the 2019 protests to reach a wide international audience.</p><p>Translator <strong>Jennifer Feeley</strong>, known for her translations of Hong Kong writer Xi Xi, brings a deep understanding of Hong Kong's literary voice to the English text.</p></div><div class="card"><h3><span class="icon-circle ic-ink">&#9830;</span> Other Works (in Chinese)</h3><p><em>The One Who Lives on the Safety Island</em> (2014, novel) &middot; <em>Staticky Specimen</em> (2017, poetry) &middot; <em>Bright as It Is</em> (2018, novel)</p></div></div></div><!-- PLAYLIST --><div class="section" id="playlist"><div class="section-title">A Hong Kong Playlist</div><div class="section-subtitle">15 tracks from Hong Kong artists that mirror the emotional landscape of this novel. Each title links to YouTube.</div><div class="playlist-intro card"><p>Every song here is by a Hong Kong artist. The mix spans protest anthems, Cantopop classics about loss and belonging, and songs that capture the ache of a city in motion. Play while you read, or listen afterward to sit with the feelings.</p></div><a class="track" href="https://www.youtube.com/watch?v=y7yRDOLCy4Y" target="_blank" rel="noopener"><div class="track-num">1</div><div class="track-info"><div class="song">Glory to Hong Kong</div><div class="song-zh">&#39000;&#27054;&#20809;&#27512;&#39321;&#28207;</div><div class="artist">Anonymous / 2019 Protest Anthem</div></div><div class="track-why">The anthem of the movement itself</div><span class="track-tag tag-protest">Protest</span><div class="yt-icon"></div></a><a class="track" href="https://www.youtube.com/watch?v=V4GUy2EHMMs" target="_blank" rel="noopener"><div class="track-num">2</div><div class="track-info"><div class="song">Boundless Oceans, Vast Skies</div><div class="song-zh">&#28023;&#38346;&#22825;&#31354;</div><div class="artist">Beyond</div></div><div class="track-why">Hong Kong's unofficial freedom anthem</div><span class="track-tag tag-identity">Identity</span><div class="yt-icon"></div></a><a class="track" href="https://www.youtube.com/watch?v=PrGsAMbgUh4" target="_blank" rel="noopener"><div class="track-num">3</div><div class="track-info"><div class="song">Glorious Years</div><div class="song-zh">&#20809;&#36637;&#27506;&#26376;</div><div class="artist">Beyond</div></div><div class="track-why">Written about Mandela; became a protest staple</div><span class="track-tag tag-resilience">Resilience</span><div class="yt-icon"></div></a><a class="track" href="https://www.youtube.com/watch?v=FvlJyzAYQrk" target="_blank" rel="noopener"><div class="track-num">4</div><div class="track-info"><div class="song">Wedding Card Street</div><div class="song-zh">&#21916;&#24086;&#34903;</div><div class="artist">Kay Tse (&#35613;&#23433;&#29738;)</div></div><div class="track-why">Mourning a vanishing neighborhood</div><span class="track-tag tag-nostalgia">Nostalgia</span><div class="yt-icon"></div></a><a class="track" href="https://www.youtube.com/watch?v=ygf2uiEUg64" target="_blank" rel="noopener"><div class="track-num">5</div><div class="track-info"><div class="song">Promise</div><div class="song-zh">&#32004;&#23450;</div><div class="artist">Faye Wong (&#29579;&#33778;)</div></div><div class="track-why">A promise made in a city that keeps changing</div><span class="track-tag tag-loss">Loss</span><div class="yt-icon"></div></a><a class="track" href="https://www.youtube.com/watch?v=Hlp8XD0R5qo" target="_blank" rel="noopener"><div class="track-num">6</div><div class="track-info"><div class="song">Lonely Brave</div><div class="song-zh">&#23396;&#21191;&#32773;</div><div class="artist">Eason Chan (&#38515;&#22869;&#36805;)</div></div><div class="track-why">The courage it takes to stand alone</div><span class="track-tag tag-resilience">Resilience</span><div class="yt-icon"></div></a><a class="track" href="https://www.youtube.com/watch?v=JM9rx_hN1Ko" target="_blank" rel="noopener"><div class="track-num">7</div><div class="track-info"><div class="song">Ten Years</div><div class="song-zh">&#21313;&#24180;</div><div class="artist">Eason Chan (&#38515;&#22869;&#36805;)</div></div><div class="track-why">Looking back at what was lost</div><span class="track-tag tag-nostalgia">Nostalgia</span><div class="yt-icon"></div></a><a class="track" href="https://www.youtube.com/watch?v=lYS8QJyIpf4" target="_blank" rel="noopener"><div class="track-num">8</div><div class="track-info"><div class="song">Rolls-Royce</div><div class="song-zh">&#21214;&#26031;&middot;&#33802;&#26031;</div><div class="artist">Denise Ho (&#20309;&#38901;&#35433;)</div></div><div class="track-why">From HK's most prominent activist-singer</div><span class="track-tag tag-protest">Protest</span><div class="yt-icon"></div></a><a class="track" href="https://www.youtube.com/watch?v=lQj0JMqzCb8" target="_blank" rel="noopener"><div class="track-num">9</div><div class="track-info"><div class="song">Wasteland</div><div class="song-zh">&#33618;&#21407;</div><div class="artist">Ellen Loo (&#30439;&#20977;&#24420;)</div></div><div class="track-why">Raw emotion from an artist gone too soon</div><span class="track-tag tag-loss">Loss</span><div class="yt-icon"></div></a><a class="track" href="https://www.youtube.com/watch?v=KK9viFTvIIk" target="_blank" rel="noopener"><div class="track-num">10</div><div class="track-info"><div class="song">Lifetime Beauty</div><div class="song-zh">&#32066;&#36523;&#32654;&#40599;</div><div class="artist">Sammi Cheng (&#37165;&#31168;&#25991;)</div></div><div class="track-why">Surfaces vs. what lies beneath</div><span class="track-tag tag-identity">Identity</span><div class="yt-icon"></div></a><a class="track" href="https://www.youtube.com/watch?v=b9Wi_ATz-3E" target="_blank" rel="noopener"><div class="track-num">11</div><div class="track-info"><div class="song">Spring Light Years</div><div class="song-zh">&#39321;&#20809;&#24180;&#33775;</div><div class="artist">Anthony Wong (&#40643;&#32768;&#26126;)</div></div><div class="track-why">Queer icon, democracy activist, banned from mainland</div><span class="track-tag tag-protest">Protest</span><div class="yt-icon"></div></a><a class="track" href="https://www.youtube.com/watch?v=XnNIPXT9YvE" target="_blank" rel="noopener"><div class="track-num">12</div><div class="track-info"><div class="song">Song of the Setting Sun</div><div class="song-zh">&#22805;&#38525;&#20043;&#27468;</div><div class="artist">Anita Mui (&#26757;&#33395;&#33459;)</div></div><div class="track-why">A city's twilight, an era ending</div><span class="track-tag tag-nostalgia">Nostalgia</span><div class="yt-icon"></div></a><a class="track" href="https://www.youtube.com/watch?v=UmTB6E5mU5w" target="_blank" rel="noopener"><div class="track-num">13</div><div class="track-info"><div class="song">The Wind Blows On</div><div class="song-zh">&#39080;&#32380;&#32396;&#21561;</div><div class="artist">Leslie Cheung (&#24373;&#22283;&#27054;)</div></div><div class="track-why">Letting go of what you can't hold</div><span class="track-tag tag-loss">Loss</span><div class="yt-icon"></div></a><a class="track" href="https://www.youtube.com/watch?v=pQlAWZLOpgo" target="_blank" rel="noopener"><div class="track-num">14</div><div class="track-info"><div class="song">At Least I Still Have You</div><div class="song-zh">&#33267;&#23569;&#36996;&#26377;&#20320;</div><div class="artist">Sandy Lam (&#26519;&#25014;&#34030;)</div></div><div class="track-why">Holding on to the people who matter</div><span class="track-tag tag-identity">Identity</span><div class="yt-icon"></div></a><a class="track" href="https://www.youtube.com/watch?v=geN8mEfMR8w" target="_blank" rel="noopener"><div class="track-num">15</div><div class="track-info"><div class="song">Every Time You Leave</div><div class="song-zh">&#27599;&#27425;&#20320;&#36208;&#30340;&#26178;&#20505;&#20998;&#25163;</div><div class="artist">My Little Airport</div></div><div class="track-why">HK indie: small moments, big ache</div><span class="track-tag tag-loss">Loss</span><div class="yt-icon"></div></a><p style="margin-top: 24px; font-size: 0.84rem; color: var(--muted); text-align: center; line-height: 1.6;">Click any track to watch on YouTube. Search these titles on Spotify or Apple Music to build your own streaming playlist.</p></div><!-- BOOK CLUB QUESTIONS --><div class="section" id="questions"><div class="section-title">10 Questions for Your Book Group</div><div class="section-subtitle">Tap any question to reveal a discussion prompt underneath</div><div class="question-card" onclick="this.classList.toggle('open')"><div class="q-header"><div class="q-number">1</div><div class="q-text">Panda keeps shopping, getting her nails done, and going to the movies while the city burns. Is her insistence on normalcy a form of resistance&mdash;or a form of cowardice?</div></div><div class="q-subtext">Consider how Leung presents Panda without judgment. Is maintaining daily life during crisis an act of self-preservation, privilege, denial, or quiet defiance? Have you ever kept your routine going during a crisis, and what did that mean for you?</div><div class="q-toggle">Tap for discussion prompt</div></div><div class="question-card" onclick="this.classList.toggle('open')"><div class="q-header"><div class="q-number">2</div><div class="q-text">The novel suggests that what you DON'T do during a political crisis matters as much as what you do. Where in your own life have you felt the weight of inaction?</div></div><div class="q-subtext">Kirkus noted this as a central theme. Think about moments in your community, workplace, or country where silence or inaction carried moral weight. Does Leung seem to believe neutrality is possible?</div><div class="q-toggle">Tap for discussion prompt</div></div><div class="question-card" onclick="this.classList.toggle('open')"><div class="q-header"><div class="q-number">3</div><div class="q-text">Leung deliberately avoids telling you who is "right." Did that frustrate you&mdash;or did it make the novel more powerful? Should political fiction take sides?</div></div><div class="q-subtext">Compare this to other political novels you've read. Does presenting multiple perspectives without judgment make a story more honest, or does it risk creating false equivalence? What obligation does a writer have when depicting real events?</div><div class="q-toggle">Tap for discussion prompt</div></div><div class="question-card" onclick="this.classList.toggle('open')"><div class="q-header"><div class="q-number">4</div><div class="q-text">The title itself is a paradox: "everyday" and "movement" seem to contradict each other. By the end of the novel, how do you understand the title differently than when you started?</div></div><div class="q-subtext">Think about how the protests transformed ordinary spaces&mdash;shopping malls, train stations, family dinner tables. When does the "everyday" become political? Is there a point in the novel where you can no longer separate the two?</div><div class="q-toggle">Tap for discussion prompt</div></div><div class="question-card" onclick="this.classList.toggle('open')"><div class="q-header"><div class="q-number">5</div><div class="q-text">This book was banned from the Hong Kong Book Fair after political complaints. Does knowing that change how you read it? Should it?</div></div><div class="q-subtext">Discuss the relationship between censorship and literature. Does a ban validate a book's importance? Does it change what you look for in the text? And what does it mean that this novel now reaches an English-speaking audience precisely because it was suppressed at home?</div><div class="q-toggle">Tap for discussion prompt</div></div><div class="question-card" onclick="this.classList.toggle('open')"><div class="q-header"><div class="q-number">6</div><div class="q-text">The mother-daughter relationships are at the heart of this novel. How does Leung use the generational divide to mirror Hong Kong's own identity crisis?</div></div><div class="q-subtext">The mothers lived through the handover; the daughters are fighting for a future that may already be foreclosed. Where do you see the generational tension in your own political context? Is the gap between "protect yourself" and "fight for your future" bridgeable?</div><div class="q-toggle">Tap for discussion prompt</div></div><div class="question-card" onclick="this.classList.toggle('open')"><div class="q-header"><div class="q-number">7</div><div class="q-text">Leung juxtaposes the smell of tear gas with the smell of a mother's shampoo, violence with grocery shopping. What does this technique do to you as a reader?</div></div><div class="q-subtext">Discuss how the kaleidoscopic structure&mdash;rapidly shifting between the intimate and the brutal&mdash;mirrors the actual experience of living through the protests. Did you find it disorienting? Powerful? Both? How does form serve content here?</div><div class="q-toggle">Tap for discussion prompt</div></div><div class="question-card" onclick="this.classList.toggle('open')"><div class="q-header"><div class="q-number">8</div><div class="q-text">One reviewer called this novel "a love letter to Hong Kong's younger generation." Another called it a warning. Which reading do you lean toward&mdash;and can it be both?</div></div><div class="q-subtext">Think about the emotional register of the ending. Does Leung leave you with hope, grief, admiration, or dread? Does the book celebrate the generation that protested, mourn what they lost, or simply bear witness?</div><div class="q-toggle">Tap for discussion prompt</div></div><div class="question-card" onclick="this.classList.toggle('open')"><div class="q-header"><div class="q-number">9</div><div class="q-text">Consumerism runs through the novel like a second current: shopping malls, brand names, eating out. Is Leung critiquing consumer culture, or showing how it becomes a survival mechanism?</div></div><div class="q-subtext">The novel opens at New Town Plaza, a real shopping mall that became a protest site. Consider how the "yellow economy" (pro-protest businesses) turned consumption itself into activism. What does it mean when where you buy your lunch is a political act?</div><div class="q-toggle">Tap for discussion prompt</div></div><div class="question-card" onclick="this.classList.toggle('open')"><div class="q-header"><div class="q-number">10</div><div class="q-text">You're reading this novel in English, translated from Chinese, about a place most readers have never lived. What gets lost&mdash;and what gets found&mdash;in that distance?</div></div><div class="q-subtext">Discuss the role of translation in political literature. Does reading this novel as an outsider give you clarity or create blind spots? What responsibility do we have as readers engaging with someone else's political crisis? And what did this book make you see differently about your own "everyday"?</div><div class="q-toggle">Tap for discussion prompt</div></div></div><!-- GO DEEPER --><div class="section" id="links"><div class="section-title">Go Deeper</div><div class="section-subtitle">Reviews, context, and where to buy</div><div class="links-grid"><a class="link-card" href="https://www.penguinrandomhouse.com/books/774553/everyday-movement-by-gigi-l-leung-translated-by-jennifer-feeley/" target="_blank" rel="noopener"><div class="lc-source">Penguin Random House</div><div class="lc-title">Official Book Page</div><div class="lc-desc">Publisher page with excerpt and ordering links</div></a><a class="link-card" href="https://www.kirkusreviews.com/book-reviews/gigi-l-leung/everyday-movement/" target="_blank" rel="noopener"><div class="lc-source">Kirkus Reviews</div><div class="lc-title">Book Review</div><div class="lc-desc">"A cinematic, sympathetic view of the personal costs of political conflict"</div></a><a class="link-card" href="https://asiasociety.org/center-us-china-research/events/book-club-everyday-movement" target="_blank" rel="noopener"><div class="lc-source">Asia Society</div><div class="lc-title">Book Club Event</div><div class="lc-desc">March 2026 book club selection with discussion resources</div></a><a class="link-card" href="https://chajournal.com/2026/01/01/movement-everyday/" target="_blank" rel="noopener"><div class="lc-source">Cha: Asian Literary Journal</div><div class="lc-title">The Human Texture of Protest</div><div class="lc-desc">Jennifer Eagleton's review on authenticity and lived experience</div></a><a class="link-card" href="https://chajournal.com/2025/12/25/everyday-movement/" target="_blank" rel="noopener"><div class="lc-source">Cha: Asian Literary Journal</div><div class="lc-title">A Love Letter to Hong Kong</div><div class="lc-desc">Susan Blumberg-Kason on belonging and generational identity</div></a><a class="link-card" href="https://en.wikipedia.org/wiki/2019%E2%80%932020_Hong_Kong_protests" target="_blank" rel="noopener"><div class="lc-source">Wikipedia</div><div class="lc-title">2019-2020 Hong Kong Protests</div><div class="lc-desc">Comprehensive background on the historical events in the novel</div></a></div></div><footer><p>This reader's dashboard was created to help book groups and individual readers engage more deeply with <em>Everyday Movement</em> by Gigi L. Leung (translated by Jennifer Feeley, Riverhead Books, 2026).</p><p style="margin-top: 10px;">Share this page with your book club.</p></footer><script>
+function show(id) {
+document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+event.target.classList.add('active');
+window.scrollTo({ top: document.querySelector('.nav').offsetTop - 10, behavior: 'smooth' });
+}
+</script><script>document.querySelectorAll('.yt-icon').forEach(d=>d.innerHTML='<svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>')</script></body></html>
