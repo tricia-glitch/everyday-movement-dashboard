@@ -631,6 +631,11 @@
     .question-card { padding: 22px 20px; }
   }
 </style>
+
+<!-- Firebase SDK (compat mode for simplicity) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
 </head>
 <body>
 
@@ -1165,28 +1170,96 @@ function toggleQ(e, card) {
   card.classList.toggle('open');
 }
 
-/* Star / upvote â persisted per-session in memory */
-var starCounts = {};
-try { starCounts = JSON.parse(sessionStorage.getItem('em-stars') || '{}'); } catch(e) {}
+/* ============================================
+   FIREBASE SHARED VOTING
+   ============================================
+   To activate: replace the firebaseConfig below
+   with YOUR project config from Firebase Console.
+   ============================================ */
 
-function renderStars() {
+var firebaseConfig = {
+  apiKey: "AIzaSyDKFYj_hqNatprQEt740hVUB1UTCZ5MmQ4",
+  authDomain: "everyday-movement.firebaseapp.com",
+  databaseURL: "https://everyday-movement-default-rtdb.firebaseio.com",
+  projectId: "everyday-movement",
+  storageBucket: "everyday-movement.firebasestorage.app",
+  messagingSenderId: "532591063124",
+  appId: "1:532591063124:web:948165ae0c8b1fc4aebdc1"
+};
+
+var firebaseReady = false;
+var db;
+
+try {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+  firebaseReady = (firebaseConfig.apiKey !== "YOUR_API_KEY");
+} catch(e) {
+  console.warn('Firebase not configured yet. Votes will be local-only until you add your config.');
+}
+
+/* Track which questions THIS visitor already voted on */
+var myVotes = {};
+try { myVotes = JSON.parse(localStorage.getItem('em-my-votes') || '{}'); } catch(e) {}
+
+/* Render vote counts and highlight this user\'s own votes */
+function renderStars(voteCounts) {
   document.querySelectorAll('.question-card').forEach(function(card) {
     var q = card.getAttribute('data-q');
     var btn = card.querySelector('.q-star');
     var countEl = btn.querySelector('.q-star-count');
-    var count = starCounts[q] || 0;
-    countEl.textContent = count;
-    if (count > 0) { btn.classList.add('starred'); } else { btn.classList.remove('starred'); }
+    var count = (voteCounts && voteCounts[q]) ? voteCounts[q] : 0;
+    countEl.textContent = count > 0 ? count : '';
+    if (myVotes[q]) {
+      btn.classList.add('voted', 'starred');
+    } else {
+      btn.classList.remove('voted', 'starred');
+    }
   });
+}
+
+/* Listen for real-time vote updates from Firebase */
+if (firebaseReady) {
+  db.ref('votes').on('value', function(snapshot) {
+    var data = snapshot.val() || {};
+    renderStars(data);
+  });
+} else {
+  var localCounts = {};
+  try { localCounts = JSON.parse(localStorage.getItem('em-local-votes') || '{}'); } catch(e) {}
+  renderStars(localCounts);
 }
 
 function toggleStar(e, btn) {
   e.stopPropagation();
   var card = btn.closest('.question-card');
   var q = card.getAttribute('data-q');
-  if (starCounts[q]) { starCounts[q] = 0; } else { starCounts[q] = 1; }
-  try { sessionStorage.setItem('em-stars', JSON.stringify(starCounts)); } catch(ex) {}
-  renderStars();
+
+  if (firebaseReady) {
+    var ref = db.ref('votes/' + q);
+    if (myVotes[q]) {
+      delete myVotes[q];
+      ref.transaction(function(current) { return Math.max((current || 0) - 1, 0); });
+    } else {
+      myVotes[q] = true;
+      ref.transaction(function(current) { return (current || 0) + 1; });
+    }
+  } else {
+    var localCounts = {};
+    try { localCounts = JSON.parse(localStorage.getItem('em-local-votes') || '{}'); } catch(e) {}
+    if (myVotes[q]) {
+      delete myVotes[q];
+      localCounts[q] = Math.max((localCounts[q] || 0) - 1, 0);
+    } else {
+      myVotes[q] = true;
+      localCounts[q] = (localCounts[q] || 0) + 1;
+    }
+    try { localStorage.setItem('em-local-votes', JSON.stringify(localCounts)); } catch(ex) {}
+    renderStars(localCounts);
+  }
+
+  try { localStorage.setItem('em-my-votes', JSON.stringify(myVotes)); } catch(ex) {}
+}
 }
 
 renderStars();
