@@ -657,14 +657,14 @@
 
 <!-- NAV -->
 <div class="nav">
-  <button class="active" onclick="show('context')">Before You Read</button>
-  <button onclick="show('characters')">Reviews</button>
-  <button onclick="show('author')">The Author</button>
-  <button onclick="show('playlist')">HK Playlist</button>
-  <button onclick="show('films')">Film Pairings</button>
-  <button onclick="show('fooddrink')">Food &amp; Drink</button>
-  <button onclick="show('questions')">Book Club</button>
-  <button onclick="show('links')">Go Deeper</button>
+  <button class="active" onclick="show('context',this)">Before You Read</button>
+  <button onclick="show('characters',this)">Reviews</button>
+  <button onclick="show('author',this)">The Author</button>
+  <button onclick="show('playlist',this)">HK Playlist</button>
+  <button onclick="show('films',this)">Film Pairings</button>
+  <button onclick="show('fooddrink',this)">Food &amp; Drink</button>
+  <button onclick="show('questions',this)">Book Club</button>
+  <button onclick="show('links',this)">Go Deeper</button>
 </div>
 
 <!-- BEFORE YOU READ -->
@@ -1156,11 +1156,11 @@
 </footer>
 
 <script>
-function show(id) {
+function show(id, btn) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
+  if (btn) btn.classList.add('active');
   window.scrollTo({ top: document.querySelector('.nav').offsetTop - 10, behavior: 'smooth' });
 }
 
