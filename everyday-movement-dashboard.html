@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Everyday Movement — Reader's Dashboard</title>
+<meta name="description" content="An interactive reader's dashboard for Everyday Movement by Gigi L. Leung — essential context, a Hong Kong playlist, and book club questions.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --ink: #1a1a2e;
+    --cream: #faf8f5;
+    --gold: #c9a84c;
+    --red: #c0392b;
+    --teal: #2c7873;
+    --muted: #6b7280;
+    --light-border: #e5e1dc;
+    --card-bg: #ffffff;
+    --shadow: 0 4px 24px rgba(0,0,0,0.05);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.85;
+    font-weight: 400;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #fff;
+    padding: 90px 28px 70px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 30% 70%, rgba(201,168,76,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(192,57,43,0.06) 0%, transparent 50%);
+    animation: drift 20s ease-in-out infinite alternate;
+  }
+  @keyframes drift {
+    0% { transform: translate(0,0) rotate(0deg); }
+    100% { transform: translate(-3%,2%) rotate(2deg); }
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    font-weight: 600;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.6rem, 5.5vw, 3.8rem);
+    font-weight: 700;
+    margin-bottom: 14px;
+    line-height: 1.15;
+  }
+  .hero h1 em { font-style: italic; color: var(--gold); }
+  .hero .author {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 8px;
+  }
+  .hero .translator {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 32px;
+  }
+  .hero .tagline {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.6);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+  .pub-badges {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+  .pub-badge {
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 7px 18px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* NAV */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(250,248,245,0.95);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--light-border);
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 16px;
+    flex-wrap: wrap;
+  }
+  .nav button {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 9px 20px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    border-radius: 22px;
+    cursor: pointer;
+    transition: all 0.25s;
+    letter-spacing: 0.2px;
+  }
+  .nav button:hover { color: var(--ink); background: rgba(0,0,0,0.04); }
+  .nav button.active { color: #fff; background: var(--ink); }
+
+  /* SECTIONS */
+  .section { display: none; padding: 56px 28px 72px; max-width: 860px; margin: 0 auto; }
+  .section.active { display: block; }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  .section-subtitle {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 40px;
+    line-height: 1.6;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 32px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--light-border);
+  }
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .card p {
+    color: #3d3d3d;
+    font-size: 0.95rem;
+    line-height: 1.85;
+  }
+  .card p + p { margin-top: 12px; }
+
+  .icon-circle {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .ic-red { background: rgba(192,57,43,0.1); }
+  .ic-teal { background: rgba(44,120,115,0.1); }
+  .ic-gold { background: rgba(201,168,76,0.15); }
+  .ic-ink { background: rgba(26,26,46,0.08); }
+
+  /* TIMELINE */
+  /* CHARACTER / REVIEW / FILM CARDS */
+  .char-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
+  .char-card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 28px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--light-border);
+    border-top: 3px solid var(--gold);
+  }
+  .char-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+  }
+  .char-card .role {
+    font-size: 0.76rem;
+    color: var(--teal);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 12px;
+  }
+  .char-card p { font-size: 0.92rem; color: #4a4a4a; line-height: 1.8; }
+  a.char-card { transition: transform 0.2s, box-shadow 0.2s; }
+  a.char-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+
+  /* PLAYLIST */
+  .playlist-intro { margin-bottom: 32px; }
+  .playlist-intro p { color: #4a4a4a; font-size: 0.95rem; }
+  .track {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 22px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--light-border);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color: inherit;
+  }
+  .track:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(0,0,0,0.1); }
+  .track-num {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    min-width: 26px;
+    text-align: center;
+  }
+  .track-info { flex: 1; }
+  .track-info .song {
+    font-weight: 600;
+    font-size: 0.98rem;
+    color: var(--ink);
+  }
+  .track-info .song-zh {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+  .track-info .artist {
+    font-size: 0.84rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .track-why {
+    font-size: 0.82rem;
+    color: #666;
+    font-style: italic;
+    max-width: 220px;
+    text-align: right;
+    line-height: 1.4;
+    display: none;
+  }
+  .yt-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: #FF0000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .track:hover .yt-icon { transform: scale(1.1); }
+  .yt-icon svg { width: 16px; height: 16px; fill: #fff; }
+
+  .track-tag {
+    font-size: 0.68rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 11px;
+    border-radius: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .tag-protest { background: rgba(192,57,43,0.1); color: var(--red); }
+  .tag-nostalgia { background: rgba(201,168,76,0.15); color: #8a6d1b; }
+  .tag-loss { background: rgba(26,26,46,0.08); color: var(--ink); }
+  .tag-identity { background: rgba(44,120,115,0.1); color: var(--teal); }
+  .tag-resilience { background: rgba(107,114,128,0.1); color: var(--muted); }
+
+  /* TRACK CONNECTION TEXT */
+  .track-card { margin-bottom: 18px; }
+  .track-card .track { margin-bottom: 0; border-radius: 14px 14px 0 0; }
+  .track-connection {
+    background: var(--card-bg);
+    border: 1px solid var(--light-border);
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+    padding: 16px 24px;
+    font-size: 0.88rem;
+    color: #555;
+    line-height: 1.75;
+  }
+  .track-connection strong { color: var(--teal); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  @media (min-width: 680px) {
+    .track-why { display: block; }
+  }
+
+  /* QUESTIONS */
+  .question-card {
+    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--light-border);
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .question-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--gold);
+    border-radius: 4px 0 0 4px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .question-card:hover::before { opacity: 1; }
+  .question-card:hover { transform: translateX(4px); }
+  .q-header { display: flex; align-items: flex-start; gap: 16px; }
+  .q-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    min-width: 32px;
+  }
+  .q-text {
+    font-size: 1.02rem;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  .q-subtext {
+    font-size: 0.9rem;
+    color: #555;
+    margin-top: 14px;
+    padding-left: 48px;
+    display: none;
+    line-height: 1.8;
+  }
+  .question-card.open .q-subtext { display: block; }
+
+  /* COUNTDOWN BANNER */
+  .countdown-banner {
+    text-align: center;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #fff;
+    border-radius: 16px;
+    padding: 28px 24px;
+    margin-bottom: 32px;
+  }
+  .countdown-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 10px;
+  }
+  .countdown-timer {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+  .countdown-date {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.5);
+    margin-top: 8px;
+  }
+  .countdown-banner.past {
+    background: linear-gradient(135deg, var(--teal), #1a6b5a);
+  }
+  .countdown-banner.past .countdown-timer { color: #fff; }
+
+  /* READER MAP */
+  .reader-map-wrap {
+    background: var(--card-bg);
+    border-radius: 16px;
+    border: 1px solid var(--light-border);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+  .reader-map-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .reader-map-sub {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .reader-map-svg-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    cursor: crosshair;
+  }
+  .reader-map-svg-wrap svg { width: 100%; height: auto; display: block; }
+  .map-pin {
+    transition: transform 0.2s;
+    cursor: default;
+  }
+  .map-pin:hover { transform: scale(1.3); }
+  @keyframes pin-drop {
+    0% { transform: translateY(-20px) scale(0.5); opacity: 0; }
+    60% { transform: translateY(2px) scale(1.05); opacity: 1; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  @keyframes pin-pulse {
+    0% { r: 3; opacity: 0.5; }
+    100% { r: 10; opacity: 0; }
+  }
+  .reader-map-count {
+    margin-top: 14px;
+    font-size: 0.85rem;
+    color: var(--teal);
+    font-weight: 600;
+  }
+  .reader-map-note {
+    font-size: 0.72rem;
+    color: #aaa;
+    margin-top: 6px;
+  }
+
+  /* SPOILER WARNING */
+  .spoiler-gate {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    padding: 10px 16px;
+    padding-left: 48px;
+    background: linear-gradient(135deg, #fff8e1, #fff3cd);
+    border-radius: 8px;
+    font-size: 0.82rem;
+    color: #7a6200;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .spoiler-gate:hover { background: linear-gradient(135deg, #fff3cd, #ffe9a0); }
+  .spoiler-gate svg { flex-shrink: 0; }
+  .question-card.open .spoiler-gate { display: none; }
+
+  /* STAR / UPVOTE */
+  .q-star {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    font-size: 0;
+    transition: transform 0.2s;
+    z-index: 2;
+  }
+  .q-star:hover { transform: scale(1.25); }
+  .q-star svg {
+    width: 22px;
+    height: 22px;
+    stroke: #bbb;
+    fill: none;
+    stroke-width: 2;
+    transition: all 0.3s;
+  }
+  .q-star.starred svg {
+    stroke: var(--gold);
+    fill: var(--gold);
+  }
+  .q-star-count {
+    font-size: 0.7rem;
+    color: #999;
+    text-align: center;
+    margin-top: 2px;
+    font-weight: 600;
+    transition: color 0.3s;
+  }
+  .q-star.starred .q-star-count { color: var(--gold); }
+
+  .q-toggle {
+    font-size: 0.72rem;
+    color: var(--teal);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-top: 12px;
+    padding-left: 48px;
+    display: none;
+  }
+  .question-card.open .q-toggle { display: block; }
+
+  /* AUTHOR */
+  .author-bio { display: grid; grid-template-columns: 1fr; gap: 24px; }
+  .award-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .award {
+    font-size: 0.8rem;
+    padding: 7px 16px;
+    background: rgba(201,168,76,0.12);
+    color: #8a6d1b;
+    border-radius: 18px;
+    font-weight: 500;
+  }
+
+  /* LINKS */
+  .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-top: 24px; }
+  .link-card {
+    display: block;
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--light-border);
+    text-decoration: none;
+    color: var(--ink);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .link-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+  .link-card .lc-source {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .link-card .lc-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 6px; }
+  .link-card .lc-desc { font-size: 0.84rem; color: #666; line-height: 1.5; }
+
+  /* CW NOTE */
+  .cw-box {
+    background: rgba(192,57,43,0.05);
+    border: 1px solid rgba(192,57,43,0.12);
+    border-radius: 12px;
+    padding: 22px 28px;
+    margin-bottom: 28px;
+  }
+  .cw-box h4 { color: var(--red); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1.8px; margin-bottom: 10px; font-weight: 600; }
+  .cw-box p { font-size: 0.92rem; color: #555; line-height: 1.75; }
+
+  /* VOCAB */
+  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 24px; }
+  .vocab-item {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px 22px;
+    border: 1px solid var(--light-border);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+  }
+  .vocab-item .term { font-weight: 600; font-size: 0.98rem; margin-bottom: 6px; color: var(--ink); }
+  .vocab-item .def { font-size: 0.88rem; color: #555; line-height: 1.7; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 48px 28px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    border-top: 1px solid var(--light-border);
+    max-width: 860px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+  footer a { color: var(--teal); text-decoration: none; }
+
+  /* SHARE BAR */
+  .share-bar {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .share-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 8px 18px;
+    border: 1px solid var(--light-border);
+    border-radius: 20px;
+    background: var(--card-bg);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .share-btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  @media (max-width: 600px) {
+    .hero { padding: 60px 20px 48px; }
+    .section { padding: 36px 18px 48px; }
+    .card { padding: 24px; }
+    .nav { gap: 3px; }
+    .nav button { font-size: 0.74rem; padding: 8px 14px; }
+    .track { padding: 14px 16px; gap: 12px; }
+    .question-card { padding: 22px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-label">Reader's Dashboard</div>
+    <h1><em>Everyday Movement</em></h1>
+    <div class="author">by Gigi L. Leung &middot; translated by Jennifer Feeley</div>
+    <div class="translator">Riverhead Books &middot; February 2026 &middot; 288 pages</div>
+    <div class="tagline">"A cinematic, sympathetic view of the personal costs of political conflict, many of which will be frighteningly familiar."</div>
+    <div class="pub-badges">
+      <span class="pub-badge">Golden Tripod Award Winner</span>
+      <span class="pub-badge">Asia Society Book Club Pick</span>
+      <span class="pub-badge">Banned at HK Book Fair 2024</span>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="active" onclick="show('context')">Before You Read</button>
+  <button onclick="show('characters')">Reviews</button>
+  <button onclick="show('author')">The Author</button>
+  <button onclick="show('playlist')">HK Playlist</button>
+  <button onclick="show('films')">Film Pairings</button>
+  <button onclick="show('fooddrink')">Food &amp; Drink</button>
+  <button onclick="show('questions')">Book Club</button>
+  <button onclick="show('links')">Go Deeper</button>
+</div>
+
+<!-- BEFORE YOU READ -->
+<div class="section active" id="context">
+  <div class="section-title">Before You Read</div>
+  <div class="section-subtitle">Essential context to get the most from this novel</div>
+
+  <div class="card">
+    <h3><span class="icon-circle ic-ink">&#9733;</span> What This Book Is</h3>
+    <p><strong>Everyday Movement</strong> is an award-winning novel set during the 2019 Hong Kong anti-extradition protests. It follows two college roommates&mdash;the quiet, anxious <strong>Ah Lei</strong> and the brash, self-assured <strong>Panda</strong>&mdash;as their friendship, families, and daily lives are reshaped by the political upheaval around them.</p>
+    <p>The novel interweaves scenes of normalcy (meals, shopping, movies) with episodes of tear gas, violence, and moral reckoning. Originally published in Chinese, it won Taiwan's <strong>Golden Tripod Award</strong>&mdash;the country's highest literary honor&mdash;and was notably <strong>removed from the Hong Kong Book Fair in 2024</strong> after political complaints.</p>
+  </div>
+
+  <div class="cw-box">
+    <h4>Content Heads-Up</h4>
+    <p>This novel includes depictions of protest violence, tear gas exposure, police confrontation, political tension within families, and emotional distress. Leung portrays these events with realism and visceral sensory detail.</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon-circle ic-red">&#9632;</span> Hong Kong: A Brief FAQ</h3>
+    <p>You don't need to be an expert to read this novel, but a few basics will deepen your understanding of what's at stake.</p>
+  </div>
+
+  <div class="vocab-grid">
+    <div class="vocab-item">
+      <div class="term">Why was Hong Kong different from the rest of China?</div>
+      <div class="def">When Britain returned Hong Kong to China in 1997, the agreement guaranteed freedoms of press, speech, and assembly until 2047 under a framework called "one country, two systems." The 2019 protests were about the fear that this promise was being broken decades early.</div>
+    </div>
+    <div class="vocab-item">
+      <div class="term">What triggered the 2019 protests?</div>
+      <div class="def">A proposed extradition bill that would have allowed Hong Kong residents to be sent to mainland China for trial. Over a million people marched against it. The government suspended the bill, but by then the movement had expanded into broader demands for democracy and accountability.</div>
+    </div>
+    <div class="vocab-item">
+      <div class="term">How big were the protests?</div>
+      <div class="def">Massive. In a city of 7.5 million, an estimated 2 million marched on a single day. The movement lasted months, with tear gas, mass arrests, and clashes becoming part of daily life&mdash;which is exactly what the novel captures.</div>
+    </div>
+    <div class="vocab-item">
+      <div class="term">What happened after?</div>
+      <div class="def">In 2020, Beijing imposed a sweeping National Security Law criminalizing dissent. Dozens of activists were arrested, organizations dissolved, and a wave of emigration began. This novel was removed from the Hong Kong Book Fair in 2024 under political pressure. Leung now lives in Taiwan.</div>
+    </div>
+    <div class="vocab-item">
+      <div class="term">Do I need to know all this to enjoy the book?</div>
+      <div class="def">No. Leung wrote the novel so you experience the protests the way her characters do&mdash;from inside daily life, without a textbook framing. The confusion, the sensory overload, the not-knowing-what-to-do: that's the point. This FAQ is just here if you want grounding.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon-circle ic-teal">&#9830;</span> Key Concepts to Know</h3>
+    <p>Leung doesn't over-explain Hong Kong for outsiders. These terms and ideas will enrich your reading:</p>
+  </div>
+
+  <div class="vocab-grid">
+    <div class="vocab-item">
+      <div class="term">"One Country, Two Systems"</div>
+      <div class="def">The framework promised when Britain returned Hong Kong to China in 1997&mdash;guaranteeing freedoms of press, speech, and assembly until 2047.</div>
+    </div>
+    <div class="vocab-item">
+      <div class="term">"Be Water"</div>
+      <div class="def">Borrowed from Bruce Lee, this became the protest motto: stay fluid, avoid direct confrontation, disperse and regroup. No single leader, no fixed location.</div>
+    </div>
+    <div class="vocab-item">
+      <div class="term">Lennon Walls</div>
+      <div class="def">Public walls covered with sticky notes carrying messages of solidarity. Named after the original in Prague, they appeared across Hong Kong neighborhoods.</div>
+    </div>
+    <div class="vocab-item">
+      <div class="term">Yellow vs. Blue Economy</div>
+      <div class="def">Businesses color-coded by political allegiance. "Yellow" shops supported protesters; "blue" shops were pro-government. Where you ate lunch became a political act.</div>
+    </div>
+    <div class="vocab-item">
+      <div class="term">New Town Plaza</div>
+      <div class="def">The shopping mall in Sha Tin where the novel opens. In real life, it was a major protest flashpoint&mdash;a symbol of how consumerism and resistance occupied the same space.</div>
+    </div>
+    <div class="vocab-item">
+      <div class="term">"Five Demands, Not One Less"</div>
+      <div class="def">The protest slogan: withdraw the bill, retract the "riot" label, release arrested protesters, investigate police, and implement universal suffrage.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 28px;">
+    <h3><span class="icon-circle ic-gold">&#9827;</span> How to Read This Novel</h3>
+    <p>This isn't a protest novel with heroes and villains. Leung uses a <strong>kaleidoscopic structure</strong>&mdash;shifting between characters, moments, and moods without guiding you toward a single conclusion.</p>
+    <p>Let the fragments accumulate. The power is in the juxtaposition: a mother washing her daughter's tear-gas-stained clothes, then going to buy groceries. A couple arguing about whether to attend a march, then watching a movie. The "everyday" IS the movement. That's the entire point of the title.</p>
+  </div>
+</div>
+
+<!-- CHARACTERS -->
+<div class="section" id="characters">
+  <div class="section-title">Reviews &amp; Essays</div>
+  <div class="section-subtitle">Critical perspectives on the novel &mdash; read before or after the book</div>
+
+  <div class="char-grid">
+    <a class="char-card" href="https://chajournal.com/2026/01/01/movement-everyday/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:block;">
+      <h4>&#8220;The Human Texture of Protest&#8221;</h4>
+      <div class="role">Jennifer Eagleton &middot; Cha: An Asian Literary Journal &middot; Jan 2026</div>
+      <p>A deep-dive review exploring how Leung renders the 2019 protests not through grand political narrative but through the sensory, emotional grain of ordinary life&mdash;tear gas mixing with the smell of cooking, the weight of a phone full of protest footage. Eagleton examines how this novel makes the political deeply personal.</p>
+    </a>
+    <a class="char-card" href="https://chajournal.com/2025/12/25/everyday-movement/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:block;">
+      <h4>&#8220;A Love Letter to Hong Kong&#8221;</h4>
+      <div class="role">Susan Blumberg-Kason &middot; Cha: An Asian Literary Journal &middot; Dec 2025</div>
+      <p>A first-impressions essay that situates <em>Everyday Movement</em> as an act of literary devotion to the city itself&mdash;not just to the protests, but to the neighborhoods, rhythms, and relationships that define Hong Kong. Blumberg-Kason considers what it means to write about a place you can no longer safely return to.</p>
+    </a>
+    <a class="char-card" href="https://wordswithoutborders.org/read/article/2026-03/the-latest-chapter-post-2019-fiction-from-hong-kong-l-l-c-j/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:block;">
+      <h4>&#8220;The Latest Chapter: Post-2019 Fiction from Hong Kong&#8221;</h4>
+      <div class="role">Words Without Borders &middot; March 2026</div>
+      <p>A wider literary essay that places <em>Everyday Movement</em> alongside other post-2019 Hong Kong fiction, examining how a generation of writers is processing political upheaval through literature&mdash;and what it means when that literature is banned at home but published abroad.</p>
+    </a>
+  </div>
+</div>
+
+<!-- AUTHOR -->
+<div class="section" id="author">
+  <div class="section-title">About the Author</div>
+  <div class="section-subtitle">Gigi L. Leung (Leung Lee Chi / &#26753;&#33673;&#23039;)</div>
+
+  <div class="author-bio">
+    <div class="card">
+      <h3><span class="icon-circle ic-gold">&#9998;</span> Who She Is</h3>
+      <p>Gigi L. Leung grew up in Hong Kong, graduated from the Chinese University of Hong Kong, and now lives in Hualien, Taiwan. She began writing at fifteen about individuals and the times in which they live. She is among the youngest award-winning authors in Hong Kong's literary scene and writes both fiction and poetry.</p>
+      <div class="award-list">
+        <span class="award">Golden Tripod Award 2024 (Taiwan)</span>
+        <span class="award">Young Artist Award 2020 (HK Arts Council)</span>
+        <span class="award">Taipei Literary Award Finalist</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon-circle ic-teal">&#9733;</span> Why This Book Matters</h3>
+      <p><strong>Everyday Movement</strong> was ordered removed from the Hong Kong Book Fair in 2024 after political complaints&mdash;an act that underscores its power and relevance. For English-language readers, this is one of the first major works of fiction about the 2019 protests to reach a wide international audience.</p>
+      <p>Translator <strong>Jennifer Feeley</strong>, known for her translations of Hong Kong writer Xi Xi, brings a deep understanding of Hong Kong's literary voice to the English text.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon-circle ic-ink">&#9830;</span> Other Works (in Chinese)</h3>
+      <p><em>The One Who Lives on the Safety Island</em> (2014, novel) &middot; <em>Staticky Specimen</em> (2017, poetry) &middot; <em>Bright as It Is</em> (2018, novel)</p>
+    </div>
+  </div>
+</div>
+
+<!-- PLAYLIST -->
+<div class="section" id="playlist">
+  <div class="section-title">A Hong Kong Playlist</div>
+  <div class="section-subtitle">5 songs deeply connected to the emotional world of this novel. Each links to YouTube.</div>
+
+  <div class="playlist-intro card">
+    <p>These aren't background music&mdash;they're companion pieces. Each song maps onto something specific in the novel: a scene, a tension, a feeling Leung builds across the book. Play them while you read, or after.</p>
+  </div>
+
+  <div class="track-card">
+    <a class="track" href="https://www.youtube.com/watch?v=y7yRDOLCy4Y" target="_blank" rel="noopener">
+      <div class="track-num">1</div>
+      <div class="track-info">
+        <div class="song">Glory to Hong Kong</div>
+        <div class="song-zh">&#39000;&#27054;&#20809;&#27512;&#39321;&#28207;</div>
+        <div class="artist">Anonymous / 2019 Protest Anthem</div>
+      </div>
+      <span class="track-tag tag-protest">Protest</span>
+      <div class="yt-icon"><svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div>
+    </a>
+    <div class="track-connection"><strong>Connection to the book:</strong> This is the anthem that emerged from the movement the novel depicts. Composed anonymously and crowd-performed in shopping malls&mdash;the same malls where Leung's characters shop, eat, and try to maintain normalcy. When you hear it, you're hearing the sound the characters hear. The song was later criminalized under Hong Kong's national security law.</div>
+  </div>
+
+  <div class="track-card">
+    <a class="track" href="https://www.youtube.com/watch?v=V4GUy2EHMMs" target="_blank" rel="noopener">
+      <div class="track-num">2</div>
+      <div class="track-info">
+        <div class="song">Boundless Oceans, Vast Skies</div>
+        <div class="song-zh">&#28023;&#38346;&#22825;&#31354;</div>
+        <div class="artist">Beyond</div>
+      </div>
+      <span class="track-tag tag-identity">Identity</span>
+      <div class="yt-icon"><svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div>
+    </a>
+    <div class="track-connection"><strong>Connection to the book:</strong> Hong Kong's unofficial anthem of perseverance. Beyond wrote it in 1993 about chasing dreams against impossible odds; by 2019 it had become the song protesters sang in the streets. It captures the central tension of the novel: the desire for freedom colliding with the reality of what it costs. Ah Lei's uncertainty and Panda's defiance are both inside this song.</div>
+  </div>
+
+  <div class="track-card">
+    <a class="track" href="https://www.youtube.com/watch?v=FvlJyzAYQrk" target="_blank" rel="noopener">
+      <div class="track-num">3</div>
+      <div class="track-info">
+        <div class="song">Wedding Card Street</div>
+        <div class="song-zh">&#21916;&#24086;&#34903;</div>
+        <div class="artist">Kay Tse (&#35613;&#23433;&#29738;)</div>
+      </div>
+      <span class="track-tag tag-nostalgia">Nostalgia</span>
+      <div class="yt-icon"><svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div>
+    </a>
+    <div class="track-connection"><strong>Connection to the book:</strong> Kay Tse mourns a specific Hong Kong street being demolished for redevelopment&mdash;exactly the kind of loss Leung writes about. The novel is saturated with named places: MTR stations, shopping malls, university campuses. This song captures what it feels like when the physical city you know starts disappearing, which is the backdrop to everything the characters experience.</div>
+  </div>
+
+  <div class="track-card">
+    <a class="track" href="https://www.youtube.com/watch?v=lYS8QJyIpf4" target="_blank" rel="noopener">
+      <div class="track-num">4</div>
+      <div class="track-info">
+        <div class="song">Rolls-Royce</div>
+        <div class="song-zh">&#21214;&#26031;&middot;&#33802;&#26031;</div>
+        <div class="artist">Denise Ho (&#20309;&#38901;&#35433;)</div>
+      </div>
+      <span class="track-tag tag-protest">Protest</span>
+      <div class="yt-icon"><svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div>
+    </a>
+    <div class="track-connection"><strong>Connection to the book:</strong> Denise Ho is the real-life version of the choices Leung's characters face. A Cantopop star who was blacklisted from mainland China after supporting the Umbrella Movement, she lost her commercial career but became a symbol of artistic conscience. The novel asks what you're willing to sacrifice; Ho's life answers it. She was later arrested under the national security law.</div>
+  </div>
+
+  <div class="track-card">
+    <a class="track" href="https://www.youtube.com/watch?v=geN8mEfMR8w" target="_blank" rel="noopener">
+      <div class="track-num">5</div>
+      <div class="track-info">
+        <div class="song">Every Time You Leave</div>
+        <div class="song-zh">&#27599;&#27425;&#20320;&#36208;&#30340;&#26178;&#20505;&#20998;&#25163;</div>
+        <div class="artist">My Little Airport</div>
+      </div>
+      <span class="track-tag tag-loss">Loss</span>
+      <div class="yt-icon"><svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg></div>
+    </a>
+    <div class="track-connection"><strong>Connection to the book:</strong> My Little Airport is the sound of the generation Leung writes about&mdash;young, melancholic, fiercely local. This lo-fi track captures the quiet ache of departures that runs through the novel: friends leaving Hong Kong, relationships fracturing under political pressure, the slow realization that the city you grew up in might not be there to come back to. It's the emotional frequency of Ah Lei's interior world.</div>
+  </div>
+
+  <p style="margin-top: 24px; font-size: 0.84rem; color: var(--muted); text-align: center; line-height: 1.6;">Click any track to listen on YouTube. Search these titles on Spotify or Apple Music to build your own streaming playlist.</p>
+</div>
+
+<!-- BOOK CLUB QUESTIONS -->
+<div class="section" id="questions">
+  <div class="countdown-banner" id="countdown-banner">
+    <div class="countdown-label">Book Group Starts</div>
+    <div class="countdown-timer" id="countdown-timer"></div>
+    <div class="countdown-date">May 1, 2026</div>
+  </div>
+
+  <div class="reader-map-wrap" id="reader-map-wrap">
+    <div class="reader-map-title">Where Are You Reading From?</div>
+    <div class="reader-map-sub">Click the map to drop your pin</div>
+    <div class="reader-map-svg-wrap" id="map-container">
+      <svg id="reader-map" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
+        <!-- ocean -->
+        <rect width="1000" height="500" fill="#eef4f8"/>
+        <!-- simplified continents -->
+        <g fill="#c8d6df" stroke="#a0b4c0" stroke-width="0.5">
+          <!-- North America -->
+          <path d="M60,80 L150,60 L220,70 L260,100 L270,140 L250,180 L230,200 L200,220 L180,260 L170,240 L130,220 L100,200 L80,170 L60,140 Z"/>
+          <path d="M170,240 L200,260 L220,280 L210,300 L180,290 L160,270 Z"/>
+          <!-- South America -->
+          <path d="M220,310 L250,300 L280,320 L300,360 L310,400 L300,440 L280,460 L260,450 L240,420 L230,380 L220,350 Z"/>
+          <!-- Europe -->
+          <path d="M440,70 L480,60 L520,70 L540,90 L530,120 L510,140 L490,130 L470,140 L450,130 L440,100 Z"/>
+          <!-- Africa -->
+          <path d="M450,180 L490,170 L530,180 L550,220 L560,270 L550,320 L530,360 L500,380 L470,370 L450,330 L440,280 L440,230 Z"/>
+          <!-- Asia -->
+          <path d="M540,50 L620,40 L700,50 L780,70 L820,100 L800,140 L770,160 L730,170 L690,160 L650,170 L620,160 L580,140 L550,120 L540,90 Z"/>
+          <path d="M620,160 L650,180 L680,200 L700,230 L690,260 L660,270 L630,250 L610,220 L600,190 Z"/>
+          <!-- India -->
+          <path d="M640,200 L670,190 L690,210 L700,250 L680,280 L650,270 L630,240 Z"/>
+          <!-- Southeast Asia -->
+          <path d="M720,200 L750,190 L770,210 L760,240 L740,250 L720,230 Z"/>
+          <!-- Australia -->
+          <path d="M760,340 L820,320 L870,330 L890,360 L880,400 L850,420 L810,410 L780,390 L760,360 Z"/>
+          <!-- Japan/Korea -->
+          <path d="M800,100 L815,90 L825,100 L820,120 L805,125 Z"/>
+          <!-- UK/Ireland -->
+          <path d="M430,80 L440,75 L445,85 L438,95 L430,90 Z"/>
+          <!-- HK marker area (small star) -->
+        </g>
+        <!-- Hong Kong highlight -->
+        <circle cx="753" cy="195" r="5" fill="var(--red)" opacity="0.7"/>
+        <text x="753" y="215" text-anchor="middle" font-size="9" fill="var(--red)" font-weight="600" font-family="sans-serif">HK</text>
+        <!-- Pins go here -->
+        <g id="pin-layer"></g>
+      </svg>
+    </div>
+    <div class="reader-map-count" id="reader-count"></div>
+    <div class="reader-map-note">Pins are saved for your session. Share a screenshot with your book group!</div>
+  </div>
+
+  <div class="section-title">10 Questions for Your Book Group</div>
+  <div class="section-subtitle">Tap any question to reveal a discussion prompt underneath &mdash; star the ones your group wants to discuss most</div>
+
+  <div class="question-card" data-q="1" onclick="toggleQ(event, this)">
+    <button class="q-star" onclick="toggleStar(event, this)" aria-label="Star this question"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><div class="q-star-count">0</div></button>
+    <div class="q-header">
+      <div class="q-number">1</div>
+      <div class="q-text">Panda keeps shopping, getting her nails done, and going to the movies while the city burns. Is her insistence on normalcy a form of resistance&mdash;or a form of cowardice?</div>
+    </div>
+    <div class="spoiler-gate"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> May contain spoilers &mdash; tap to reveal discussion prompt</div>
+    <div class="q-subtext">Consider how Leung presents Panda without judgment. Is maintaining daily life during crisis an act of self-preservation, privilege, denial, or quiet defiance? Have you ever kept your routine going during a crisis, and what did that mean for you?</div>
+    <div class="q-toggle">Tap to close</div>
+  </div>
+
+  <div class="question-card" data-q="2" onclick="toggleQ(event, this)">
+    <button class="q-star" onclick="toggleStar(event, this)" aria-label="Star this question"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><div class="q-star-count">0</div></button>
+    <div class="q-header">
+      <div class="q-number">2</div>
+      <div class="q-text">The novel suggests that what you DON'T do during a political crisis matters as much as what you do. Where in your own life have you felt the weight of inaction?</div>
+    </div>
+    <div class="spoiler-gate"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> May contain spoilers &mdash; tap to reveal discussion prompt</div>
+    <div class="q-subtext">Kirkus noted this as a central theme. Think about moments in your community, workplace, or country where silence or inaction carried moral weight. Does Leung seem to believe neutrality is possible?</div>
+    <div class="q-toggle">Tap to close</div>
+  </div>
+
+  <div class="question-card" data-q="3" onclick="toggleQ(event, this)">
+    <button class="q-star" onclick="toggleStar(event, this)" aria-label="Star this question"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><div class="q-star-count">0</div></button>
+    <div class="q-header">
+      <div class="q-number">3</div>
+      <div class="q-text">Leung deliberately avoids telling you who is "right." Did that frustrate you&mdash;or did it make the novel more powerful? Should political fiction take sides?</div>
+    </div>
+    <div class="spoiler-gate"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> May contain spoilers &mdash; tap to reveal discussion prompt</div>
+    <div class="q-subtext">Compare this to other political novels you've read. Does presenting multiple perspectives without judgment make a story more honest, or does it risk creating false equivalence? What obligation does a writer have when depicting real events?</div>
+    <div class="q-toggle">Tap to close</div>
+  </div>
+
+  <div class="question-card" data-q="4" onclick="toggleQ(event, this)">
+    <button class="q-star" onclick="toggleStar(event, this)" aria-label="Star this question"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><div class="q-star-count">0</div></button>
+    <div class="q-header">
+      <div class="q-number">4</div>
+      <div class="q-text">The title itself is a paradox: "everyday" and "movement" seem to contradict each other. By the end of the novel, how do you understand the title differently than when you started?</div>
+    </div>
+    <div class="spoiler-gate"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> May contain spoilers &mdash; tap to reveal discussion prompt</div>
+    <div class="q-subtext">Think about how the protests transformed ordinary spaces&mdash;shopping malls, train stations, family dinner tables. When does the "everyday" become political? Is there a point in the novel where you can no longer separate the two?</div>
+    <div class="q-toggle">Tap to close</div>
+  </div>
+
+  <div class="question-card" data-q="5" onclick="toggleQ(event, this)">
+    <button class="q-star" onclick="toggleStar(event, this)" aria-label="Star this question"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><div class="q-star-count">0</div></button>
+    <div class="q-header">
+      <div class="q-number">5</div>
+      <div class="q-text">This book was banned from the Hong Kong Book Fair after political complaints. Does knowing that change how you read it? Should it?</div>
+    </div>
+    <div class="spoiler-gate"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> May contain spoilers &mdash; tap to reveal discussion prompt</div>
+    <div class="q-subtext">Discuss the relationship between censorship and literature. Does a ban validate a book's importance? Does it change what you look for in the text? And what does it mean that this novel now reaches an English-speaking audience precisely because it was suppressed at home?</div>
+    <div class="q-toggle">Tap to close</div>
+  </div>
+
+  <div class="question-card" data-q="6" onclick="toggleQ(event, this)">
+    <button class="q-star" onclick="toggleStar(event, this)" aria-label="Star this question"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><div class="q-star-count">0</div></button>
+    <div class="q-header">
+      <div class="q-number">6</div>
+      <div class="q-text">The mother-daughter relationships are at the heart of this novel. How does Leung use the generational divide to mirror Hong Kong's own identity crisis?</div>
+    </div>
+    <div class="spoiler-gate"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> May contain spoilers &mdash; tap to reveal discussion prompt</div>
+    <div class="q-subtext">The mothers lived through the handover; the daughters are fighting for a future that may already be foreclosed. Where do you see the generational tension in your own political context? Is the gap between "protect yourself" and "fight for your future" bridgeable?</div>
+    <div class="q-toggle">Tap to close</div>
+  </div>
+
+  <div class="question-card" data-q="7" onclick="toggleQ(event, this)">
+    <button class="q-star" onclick="toggleStar(event, this)" aria-label="Star this question"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><div class="q-star-count">0</div></button>
+    <div class="q-header">
+      <div class="q-number">7</div>
+      <div class="q-text">Leung juxtaposes the smell of tear gas with the smell of a mother's shampoo, violence with grocery shopping. What does this technique do to you as a reader?</div>
+    </div>
+    <div class="spoiler-gate"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> May contain spoilers &mdash; tap to reveal discussion prompt</div>
+    <div class="q-subtext">Discuss how the kaleidoscopic structure&mdash;rapidly shifting between the intimate and the brutal&mdash;mirrors the actual experience of living through the protests. Did you find it disorienting? Powerful? Both? How does form serve content here?</div>
+    <div class="q-toggle">Tap to close</div>
+  </div>
+
+  <div class="question-card" data-q="8" onclick="toggleQ(event, this)">
+    <button class="q-star" onclick="toggleStar(event, this)" aria-label="Star this question"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><div class="q-star-count">0</div></button>
+    <div class="q-header">
+      <div class="q-number">8</div>
+      <div class="q-text">One reviewer called this novel "a love letter to Hong Kong's younger generation." Another called it a warning. Which reading do you lean toward&mdash;and can it be both?</div>
+    </div>
+    <div class="spoiler-gate"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> May contain spoilers &mdash; tap to reveal discussion prompt</div>
+    <div class="q-subtext">Think about the emotional register of the ending. Does Leung leave you with hope, grief, admiration, or dread? Does the book celebrate the generation that protested, mourn what they lost, or simply bear witness?</div>
+    <div class="q-toggle">Tap to close</div>
+  </div>
+
+  <div class="question-card" data-q="9" onclick="toggleQ(event, this)">
+    <button class="q-star" onclick="toggleStar(event, this)" aria-label="Star this question"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><div class="q-star-count">0</div></button>
+    <div class="q-header">
+      <div class="q-number">9</div>
+      <div class="q-text">Consumerism runs through the novel like a second current: shopping malls, brand names, eating out. Is Leung critiquing consumer culture, or showing how it becomes a survival mechanism?</div>
+    </div>
+    <div class="spoiler-gate"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> May contain spoilers &mdash; tap to reveal discussion prompt</div>
+    <div class="q-subtext">The novel opens at New Town Plaza, a real shopping mall that became a protest site. Consider how the "yellow economy" (pro-protest businesses) turned consumption itself into activism. What does it mean when where you buy your lunch is a political act?</div>
+    <div class="q-toggle">Tap to close</div>
+  </div>
+
+  <div class="question-card" data-q="10" onclick="toggleQ(event, this)">
+    <button class="q-star" onclick="toggleStar(event, this)" aria-label="Star this question"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg><div class="q-star-count">0</div></button>
+    <div class="q-header">
+      <div class="q-number">10</div>
+      <div class="q-text">You're reading this novel in English, translated from Chinese, about a place most readers have never lived. What gets lost&mdash;and what gets found&mdash;in that distance?</div>
+    </div>
+    <div class="spoiler-gate"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> May contain spoilers &mdash; tap to reveal discussion prompt</div>
+    <div class="q-subtext">Discuss the role of translation in political literature. Does reading this novel as an outsider give you clarity or create blind spots? What responsibility do we have as readers engaging with someone else's political crisis? And what did this book make you see differently about your own "everyday"?</div>
+    <div class="q-toggle">Tap to close</div>
+  </div>
+</div>
+
+<!-- FILM PAIRINGS -->
+<div class="section" id="films">
+  <div class="section-title">Film Pairings</div>
+  <div class="section-subtitle">Three films that deepen the world of this novel</div>
+
+  <div class="char-grid">
+    <div class="char-card">
+      <h4>Revolution of Our Times <span style="font-weight:400;color:var(--muted);font-size:0.85rem;">(2021)</span></h4>
+      <div class="role">Directed by Kiwi Chow &middot; Documentary &middot; 2h 32m</div>
+      <p>This documentary was filmed secretly during the 2019 protests and smuggled out of Hong Kong. It shows the actual events Leung fictionalizes&mdash;the tear gas, the mall confrontations, the exhausted young people trying to figure out what to do next. Watch it after the novel and you'll recognize every scene. It won Best Documentary at the Golden Horse Awards and is banned in Hong Kong.</p>
+      <div style="margin-top:12px;font-size:0.82rem;color:var(--teal);font-weight:600;">WHY IT PAIRS: Puts real footage to the moments Leung renders in prose. You'll understand why she chose fiction&mdash;it lets her go where the camera can't, inside her characters' heads.</div>
+    </div>
+    <div class="char-card">
+      <h4>In the Mood for Love <span style="font-weight:400;color:var(--muted);font-size:0.85rem;">(2000)</span></h4>
+      <div class="role">Directed by Wong Kar-wai &middot; Drama &middot; 1h 38m</div>
+      <p>Wong Kar-wai's masterpiece about two neighbors in 1960s Hong Kong who discover their spouses are having an affair. On its surface, it's a love story. But underneath, it's about how a city shapes the way people hold back, perform normalcy, and ache privately. That's exactly what Leung's characters do under political pressure instead of romantic pressure.</p>
+      <div style="margin-top:12px;font-size:0.82rem;color:var(--teal);font-weight:600;">WHY IT PAIRS: The emotional grammar is the same&mdash;restraint, longing, and the weight of things left unsaid. Leung writes Hong Kong the way Wong Kar-wai films it: through food, corridors, and glances.</div>
+    </div>
+    <div class="char-card">
+      <h4>Ten Years <span style="font-weight:400;color:var(--muted);font-size:0.85rem;">(2015)</span></h4>
+      <div class="role">Anthology &middot; Drama/Sci-Fi &middot; 1h 44m</div>
+      <p>Five short films imagining Hong Kong in 2025&mdash;a city where Cantonese is dying, self-immolation is political protest, and taxi drivers are surveilled by the state. Made in 2015, it was dismissed as alarmist. By 2020, much of it had come true. It won Best Film at the Hong Kong Film Awards and was immediately pulled from mainland Chinese cinemas.</p>
+      <div style="margin-top:12px;font-size:0.82rem;color:var(--teal);font-weight:600;">WHY IT PAIRS: Watch it before the novel. It shows the fears that were already in the air before 2019&mdash;the same fears that drive Leung's characters to march, freeze, or look away.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOD & DRINK -->
+<div class="section" id="fooddrink">
+  <div class="section-title">Food &amp; Drink</div>
+  <div class="section-subtitle">Set the mood for reading &mdash; the flavors of this novel's world</div>
+
+  <div class="playlist-intro card">
+    <p>Food runs through <em>Everyday Movement</em> like a second narrative&mdash;meals shared, meals skipped, the politics of where you eat. These are the tastes that accompany the story.</p>
+  </div>
+
+  <div class="char-grid">
+    <div class="char-card">
+      <h4>Hong Kong Milk Tea (&#28207;&#24335;&#22902;&#33590;)</h4>
+      <div class="role">The essential reading companion</div>
+      <p>Strong black tea filtered through a cloth "stocking," blended with evaporated milk. It's thick, bittersweet, and deeply comforting&mdash;the drink cha chaan tengs serve all day. In the novel, ordinary routines like ordering milk tea become acts of continuity. Brew it strong, add condensed or evaporated milk, and drink it while you read.</p>
+    </div>
+    <div class="char-card">
+      <h4>Egg Waffle (&#38622;&#34507;&#20180;)</h4>
+      <div class="role">Street food &middot; The taste of walking through Hong Kong</div>
+      <p>Puffy, golden, bubble-shaped waffles sold at street stalls across the city. They're the flavor of movement itself&mdash;something you eat while walking, while deciding where to go, while the city happens around you. In a novel about everyday motion through a city in crisis, this is the snack that fits.</p>
+    </div>
+    <div class="char-card">
+      <h4>Pineapple Bun (&#33360;&#34367;&#21253;)</h4>
+      <div class="role">Cha chaan teng staple &middot; Comfort in a familiar place</div>
+      <p>A sweet, crumbly-topped bun with no actual pineapple&mdash;named for the pattern on its crust. Served at the cha chaan tengs where Leung's characters sit, talk, and avoid talking. The yellow economy meant that even choosing which bakery to buy one from was political. Slice it open, add a slab of butter, and eat it with your milk tea.</p>
+    </div>
+    <div class="char-card">
+      <h4>Chrysanthemum Tea (&#33738;&#33457;&#33590;)</h4>
+      <div class="role">Cooling &middot; For the heavier chapters</div>
+      <p>A light, floral, slightly sweet tea traditionally used to "cool" the body. In a novel thick with tear gas and emotional heat, this is the counterbalance. Drink it cold during the protest chapters, hot during the quieter domestic scenes. It's the taste of trying to stay calm when everything around you isn't.</p>
+    </div>
+  </div>
+</div>
+
+<!-- GO DEEPER -->
+<div class="section" id="links">
+  <div class="section-title">Go Deeper</div>
+  <div class="section-subtitle">Reviews, context, and where to buy</div>
+
+  <div class="links-grid">
+    <a class="link-card" href="https://www.penguinrandomhouse.com/books/774553/everyday-movement-by-gigi-l-leung-translated-by-jennifer-feeley/" target="_blank" rel="noopener">
+      <div class="lc-source">Penguin Random House</div>
+      <div class="lc-title">Official Book Page</div>
+      <div class="lc-desc">Publisher page with excerpt and ordering links</div>
+    </a>
+    <a class="link-card" href="https://www.kirkusreviews.com/book-reviews/gigi-l-leung/everyday-movement/" target="_blank" rel="noopener">
+      <div class="lc-source">Kirkus Reviews</div>
+      <div class="lc-title">Book Review</div>
+      <div class="lc-desc">"A cinematic, sympathetic view of the personal costs of political conflict"</div>
+    </a>
+    <a class="link-card" href="https://asiasociety.org/center-us-china-research/events/book-club-everyday-movement" target="_blank" rel="noopener">
+      <div class="lc-source">Asia Society</div>
+      <div class="lc-title">Book Club Event</div>
+      <div class="lc-desc">March 2026 book club selection with discussion resources</div>
+    </a>
+    <a class="link-card" href="https://chajournal.com/2026/01/01/movement-everyday/" target="_blank" rel="noopener">
+      <div class="lc-source">Cha: Asian Literary Journal</div>
+      <div class="lc-title">The Human Texture of Protest</div>
+      <div class="lc-desc">Jennifer Eagleton's review on authenticity and lived experience</div>
+    </a>
+    <a class="link-card" href="https://chajournal.com/2025/12/25/everyday-movement/" target="_blank" rel="noopener">
+      <div class="lc-source">Cha: Asian Literary Journal</div>
+      <div class="lc-title">A Love Letter to Hong Kong</div>
+      <div class="lc-desc">Susan Blumberg-Kason on belonging and generational identity</div>
+    </a>
+    <a class="link-card" href="https://en.wikipedia.org/wiki/2019%E2%80%932020_Hong_Kong_protests" target="_blank" rel="noopener">
+      <div class="lc-source">Wikipedia</div>
+      <div class="lc-title">2019-2020 Hong Kong Protests</div>
+      <div class="lc-desc">Comprehensive background on the historical events in the novel</div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <p>This reader's dashboard was created to help book groups and individual readers engage more deeply with <em>Everyday Movement</em> by Gigi L. Leung (translated by Jennifer Feeley, Riverhead Books, 2026).</p>
+  <p style="margin-top: 10px;">Share this page with your book club.</p>
+</footer>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: document.querySelector('.nav').offsetTop - 10, behavior: 'smooth' });
+}
+
+/* Question card open/close — ignores clicks on the star button */
+function toggleQ(e, card) {
+  if (e.target.closest('.q-star')) return;
+  card.classList.toggle('open');
+}
+
+/* Star / upvote — persisted per-session in memory */
+var starCounts = {};
+try { starCounts = JSON.parse(sessionStorage.getItem('em-stars') || '{}'); } catch(e) {}
+
+function renderStars() {
+  document.querySelectorAll('.question-card').forEach(function(card) {
+    var q = card.getAttribute('data-q');
+    var btn = card.querySelector('.q-star');
+    var countEl = btn.querySelector('.q-star-count');
+    var count = starCounts[q] || 0;
+    countEl.textContent = count;
+    if (count > 0) { btn.classList.add('starred'); } else { btn.classList.remove('starred'); }
+  });
+}
+
+function toggleStar(e, btn) {
+  e.stopPropagation();
+  var card = btn.closest('.question-card');
+  var q = card.getAttribute('data-q');
+  if (starCounts[q]) { starCounts[q] = 0; } else { starCounts[q] = 1; }
+  try { sessionStorage.setItem('em-stars', JSON.stringify(starCounts)); } catch(ex) {}
+  renderStars();
+}
+
+renderStars();
+
+/* Countdown to May 1, 2026 */
+function updateCountdown() {
+  var target = new Date('2026-05-01T00:00:00').getTime();
+  var now = new Date().getTime();
+  var diff = target - now;
+  var banner = document.getElementById('countdown-banner');
+  var timer = document.getElementById('countdown-timer');
+  if (diff <= 0) {
+    banner.classList.add('past');
+    timer.textContent = "It's time — let's discuss!";
+    return;
+  }
+  var days = Math.floor(diff / 86400000);
+  var hrs = Math.floor((diff % 86400000) / 3600000);
+  var mins = Math.floor((diff % 3600000) / 60000);
+  var secs = Math.floor((diff % 60000) / 1000);
+  timer.textContent = days + 'd  ' + hrs + 'h  ' + mins + 'm  ' + secs + 's';
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+/* Reader Map — click to drop a pin */
+var mapPins = [];
+try { mapPins = JSON.parse(sessionStorage.getItem('em-pins') || '[]'); } catch(e) {}
+
+function renderPins() {
+  var layer = document.getElementById('pin-layer');
+  layer.innerHTML = '';
+  mapPins.forEach(function(p, i) {
+    // pulse ring
+    var pulse = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    pulse.setAttribute('cx', p.x); pulse.setAttribute('cy', p.y);
+    pulse.setAttribute('r','3'); pulse.setAttribute('fill','none');
+    pulse.setAttribute('stroke','var(--gold)'); pulse.setAttribute('stroke-width','1.5');
+    pulse.setAttribute('opacity','0');
+    pulse.innerHTML = '<animate attributeName="r" from="3" to="12" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" from="0.6" to="0" dur="2s" repeatCount="indefinite"/>';
+    layer.appendChild(pulse);
+    // pin dot
+    var c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx', p.x); c.setAttribute('cy', p.y);
+    c.setAttribute('r','4'); c.setAttribute('fill','var(--gold)');
+    c.setAttribute('stroke','#fff'); c.setAttribute('stroke-width','1.5');
+    c.setAttribute('class','map-pin');
+    c.style.animation = 'pin-drop 0.4s ease-out';
+    layer.appendChild(c);
+  });
+  var countEl = document.getElementById('reader-count');
+  if (mapPins.length === 0) {
+    countEl.textContent = '';
+  } else if (mapPins.length === 1) {
+    countEl.textContent = '1 reader checked in';
+  } else {
+    countEl.textContent = mapPins.length + ' readers checked in';
+  }
+}
+
+document.getElementById('reader-map').addEventListener('click', function(e) {
+  var svg = this;
+  var pt = svg.createSVGPoint();
+  pt.x = e.clientX; pt.y = e.clientY;
+  var svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
+  mapPins.push({ x: Math.round(svgP.x), y: Math.round(svgP.y) });
+  try { sessionStorage.setItem('em-pins', JSON.stringify(mapPins)); } catch(ex) {}
+  renderPins();
+});
+
+renderPins();
+</script>
+</body>
+</html>
